@@ -21,6 +21,20 @@ const App = () => {
         });
     };
 
+    const increment = (field) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [field]: (parseFloat(prevFormData[field]) + 1).toString()
+        }));
+    };
+
+    const decrement = (field) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [field]: Math.max(0, parseFloat(prevFormData[field]) - 1).toString() // Ensure it doesn't go below 0
+        }));
+    };
+
     const getToken = () => {
         var refreshData = {
             "refresh_token": "AMf-vBxyYfrcy9ZMzic7ZsYn1rYPKTh2h5cMq4Zn8o2XDjfcGrp-oNQNg-Cza7dHNk0yPMjNTDnWlE_xtQdojVdOzgNO5CarK6uB5TLECWBEj0FRKYCmcn-cFd5g_jcR6zLsz2v0pXlaSuNFv6MBjBuCkHvZ49hTmsdNZvOdiDzQJWbTJd4SoarLrJC_KqiJqBDpDE-uZTyChELAtJvj5qn4sKxbek00hA"
@@ -68,19 +82,60 @@ const App = () => {
         setResponse(null);
     };
 
-   // const keys = ['logo', 'serviceType', 'deliveryOptionName', 'trackingType', 'codCharge', 'pickupCutOffTime', 'maxOrderValue', 'insurancePolicy', 'maxCODValue', 'deliveryOptionId', 'extraWeightPerKg', 'deliveryCompanyName', 'returnFee', 'maxFreeWeight', 'avgDeliveryTime', 'price', 'pickupDropoff'];
     const keys = ['logo','deliveryOptionName', 'pickupDropoff', 'serviceType', 'codCharge', 'pickupCutOffTime', 'maxCODValue', 'returnFee', 'avgDeliveryTime', 'price'];
 
     return (
         <div className="container">
             <form onSubmit={handleSubmit} className="form">
-                <input type="text" name="originCity" value={formData.originCity} onChange={handleChange} placeholder="Origin City" className="input" />
-                <input type="text" name="destinationCity" value={formData.destinationCity} onChange={handleChange} placeholder="Destination City" className="input" />
-                <input type="text" name="height" value={formData.height} onChange={handleChange} placeholder="Height" className="input" />
-                <input type="text" name="width" value={formData.width} onChange={handleChange} placeholder="Width" className="input" />
-                <input type="text" name="length" value={formData.length} onChange={handleChange} placeholder="Length" className="input" />
-                <input type="text" name="weight" value={formData.weight} onChange={handleChange} placeholder="Weight" className="input" />
-                <button onClick={getToken} className="button">Get Token</button>
+                <label>
+                    Origin City
+                    <div className="input-group">
+                        <input type="text" name="originCity" value={formData.originCity} onChange={handleChange} placeholder="Origin City" />
+                    </div>
+                </label>
+                <label>
+                    Destination City
+                    <div className="input-group">
+                        <input type="text" name="destinationCity" value={formData.destinationCity} onChange={handleChange} placeholder="Destination City" />
+                    </div>
+                </label>
+                <label>
+                    Length
+                    <div className="input-group">
+                        <button type="button" onClick={() => decrement('length')}>-</button>
+                        <input type="text" name="length" value={formData.length} onChange={handleChange} />
+                        <span>cm</span>
+                        <button type="button" onClick={() => increment('length')}>+</button>
+                    </div>
+                </label>
+                <label>
+                    Width
+                    <div className="input-group">
+                        <button type="button" onClick={() => decrement('width')}>-</button>
+                        <input type="text" name="width" value={formData.width} onChange={handleChange} />
+                        <span>cm</span>
+                        <button type="button" onClick={() => increment('width')}>+</button>
+                    </div>
+                </label>
+                <label>
+                    Height
+                    <div className="input-group">
+                        <button type="button" onClick={() => decrement('height')}>-</button>
+                        <input type="text" name="height" value={formData.height} onChange={handleChange} />
+                        <span>cm</span>
+                        <button type="button" onClick={() => increment('height')}>+</button>
+                    </div>
+                </label>
+                <label>
+                    Weight
+                    <div className="input-group">
+                        <button type="button" onClick={() => decrement('weight')}>-</button>
+                        <input type="text" name="weight" value={formData.weight} onChange={handleChange} />
+                        <span>kg</span>
+                        <button type="button" onClick={() => increment('weight')}>+</button>
+                    </div>
+                </label>
+                <button type="button" onClick={getToken} className="button">Get Token</button> 
                 <button type="button" onClick={handleClear} className="button">Clear</button>
                 <button type="submit" className="button">Search</button>
             </form>
