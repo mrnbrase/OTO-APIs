@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './ShippingData.css';
+import { FaMapMarkerAlt } from 'react-icons/fa';
 
 const App = () => {
     const [token, setToken] = useState(null);
@@ -13,12 +14,39 @@ const App = () => {
         length: '1'
     });
     const [response, setResponse] = useState(null);
+    const [filteredOriginCities, setFilteredOriginCities] = useState([]);
+    const [filteredDestinationCities, setFilteredDestinationCities] = useState([]);
+    const [showDropdown, setShowDropdown] = useState(false);
 
     const handleChange = (e) => {
+        const { name, value } = e.target;
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value
+            [name]: value
         });
+
+        if (name === 'originCity') {
+            const filtered = cities.filter(city => city.toLowerCase().includes(value.toLowerCase()));
+            setFilteredOriginCities(filtered);
+            setShowDropdown(true);
+        } else if (name === 'destinationCity') {
+            const filtered = cities.filter(city => city.toLowerCase().includes(value.toLowerCase()));
+            setFilteredDestinationCities(filtered);
+            setShowDropdown(true);
+        }
+    };
+
+    const handleCitySelect = (city, field) => {
+        setFormData({
+            ...formData,
+            [field]: city
+        });
+        if (field === 'originCity') {
+            setFilteredOriginCities([]);
+        } else if (field === 'destinationCity') {
+            setFilteredDestinationCities([]);
+        }
+        setShowDropdown(false);
     };
 
     const increment = (field) => {
@@ -85,90 +113,76 @@ const App = () => {
     const keys = ['logo','deliveryOptionName', 'pickupDropoff', 'serviceType', 'codCharge', 'pickupCutOffTime', 'maxCODValue', 'returnFee', 'avgDeliveryTime', 'price'];
 
     const cities = [
-        'Riyadh', 
-        'Jeddah', 
-        'Mecca', 
-        'Medina', 
-        'Dammam', 
-        'Tabuk', 
-        'Taif', 
-        'Buraidah', 
-        'Khobar', 
-        'Abha', 
-        'Najran', 
-        'Jubail', 
-        'Hail', 
-        'Khamis Mushait', 
-        'Al Khafji', 
-        'Al Majmaah', 
-        'Al Mubarraz', 
-        'Al Bahah', 
-        'Arar', 
-        'Jizan', 
-        'Yanbu', 
-        'Qatif', 
-        'Al Qunfudhah', 
-        'Hafar Al-Batin', 
-        'Al Ahsa', 
-        'Al Zulfi', 
-        'Ras Tanura', 
-        'Al Kharj', 
-        'Al Bukayriyah', 
-        'Al Qurayyat', 
-        'Afif', 
-        'Al Lith', 
-        'Al Dawadmi', 
-        'Rafha', 
-        'Duba', 
-        'Sharurah', 
-        'Turaif', 
-        'Al Ula', 
-        'Abqaiq', 
-        'Sakaka', 
-        'Ad Dilam', 
-        'Bisha', 
-        'Unaizah', 
-        'Khafji', 
-        'Al Wajh', 
-        'Baljurashi', 
-        'Al Mithnab', 
-        'As Sulayyil', 
-        'Al Hanakiyah', 
-        'Al Namas', 
-        'Al Quwayiyah', 
-        'Al Dair', 
-        'Al Mahd', 
-        'Al Shinan', 
-        'Al Hariq', 
-        'Al Muwayh'
+        'Riyadh', 'Jeddah', 'Mecca', 'Medina', 'Dammam', 'Tabuk', 'Taif', 'Buraidah', 
+        'Khobar', 'Abha', 'Najran', 'Jubail', 'Hail', 'Khamis Mushait', 'Al Khafji', 
+        'Al Majmaah', 'Al Mubarraz', 'Al Bahah', 'Arar', 'Jizan', 'Yanbu', 'Qatif', 
+        'Al Qunfudhah', 'Hafar Al-Batin', 'Al Ahsa', 'Al Zulfi', 'Ras Tanura', 
+        'Al Kharj', 'Al Bukayriyah', 'Al Qurayyat', 'Afif', 'Al Lith', 'Al Dawadmi', 
+        'Rafha', 'Duba', 'Sharurah', 'Turaif', 'Al Ula', 'Abqaiq', 'Sakaka', 'Ad Dilam', 
+        'Bisha', 'Unaizah', 'Khafji', 'Al Wajh', 'Baljurashi', 'Al Mithnab', 
+        'As Sulayyil', 'Al Hanakiyah', 'Al Namas', 'Al Quwayiyah', 'Al Dair', 
+        'Al Mahd', 'Al Shinan', 'Al Hariq', 'Al Muwayh'
     ];
     
 
     return (
         <div className="container">
             <form onSubmit={handleSubmit} className="form">
-<label>
-    Origin City
-    <div className="input-group">
-        <input list="cities" type="text" name="originCity" value={formData.originCity} onChange={handleChange} placeholder="Origin City" />
-        <datalist id="cities">
-            {cities.map((city, index) => (
-                <option key={index} value={city} />
-            ))}
-        </datalist>
-    </div>
-</label>
-<label>
-    Destination City
-    <div className="input-group">
-        <input list="cities" type="text" name="destinationCity" value={formData.destinationCity} onChange={handleChange} placeholder="Destination City" />
-        <datalist id="cities">
-            {cities.map((city, index) => (
-                <option key={index} value={city} />
-            ))}
-        </datalist>
-    </div>
-</label>
+            <label>
+            Origin City
+            <div className="input-group">
+                <input 
+                    type="text" 
+                    name="originCity" 
+                    value={formData.originCity} 
+                    onChange={handleChange} 
+                    placeholder="Origin City" 
+                    onFocus={() => setShowDropdown(true)}
+                    onBlur={() => setTimeout(() => setShowDropdown(false), 100)} // Delay closing to allow click
+                />
+            </div>
+            {showDropdown && filteredOriginCities.length > 0 && (
+                <div className="dropdown">
+                    {filteredOriginCities.map((city, index) => (
+                        <div 
+                            key={index} 
+                            className="dropdown-item" 
+                            onClick={() => handleCitySelect(city, 'originCity')}
+                        >
+                            <FaMapMarkerAlt className="dropdown-icon" /> {city}
+                        </div>
+                    ))}
+                </div>
+            )}
+        </label>
+        <label>
+            Destination City
+            <div className="input-group">
+                <input 
+                    type="text" 
+                    name="destinationCity" 
+                    value={formData.destinationCity} 
+                    onChange={handleChange} 
+                    placeholder="Destination City" 
+                    onFocus={() => setShowDropdown(true)}
+                    onBlur={() => setTimeout(() => setShowDropdown(false), 100)} // Delay closing to allow click
+                />
+            </div>
+            {showDropdown && filteredDestinationCities.length > 0 && (
+                <div className="dropdown">
+                    {filteredDestinationCities.map((city, index) => (
+                        <div 
+                            key={index} 
+                            className="dropdown-item" 
+                            onClick={() => handleCitySelect(city, 'destinationCity')}
+                        >
+                            <FaMapMarkerAlt className="dropdown-icon" /> {city}
+                        </div>
+                    ))}
+                </div>
+            )}
+        </label>
+                
                 <label>
                     Length
                     <div className="input-group">
@@ -209,6 +223,7 @@ const App = () => {
                 <button type="button" onClick={handleClear} className="button">Clear</button>
                 <button type="submit" className="button">Search</button>
             </form>
+    
             {response && 
             <table className="table">
                 <thead>
@@ -234,9 +249,10 @@ const App = () => {
                     ))}
                 </tbody>
             </table>
-        }
+            }
         </div>
     );
+    
 };
 
 export default App;

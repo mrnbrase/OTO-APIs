@@ -126,3 +126,37 @@ body {
     background-color: #3c3c3c; /* Slightly lighter background for rows */
     color: white; /* White text */
 }
+/* Dropdown styling */
+.dropdown {
+    position: absolute;
+    background-color: #1f1f1f;
+    border: 1px solid #555;
+    border-radius: 5px;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Ensure it stays above other elements */
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+    background-color: #333;
+}
+
+.dropdown-icon {
+    margin-right: 10px;
+    color: #1a73e8; /* Color of the location icon */
+}
+
+.input-group {
+    position: relative; /* Ensure dropdown is positioned correctly */
+}
