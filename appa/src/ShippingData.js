@@ -6,8 +6,8 @@ const App = () => {
     const [token, setToken] = useState(null);
     const [formData, setFormData] = useState({
         weight: '3',
-        originCity: 'Riyadh',
-        destinationCity: 'Jeddah',
+        originCity: '',
+        destinationCity: '',
         height: '1',
         width: '1',
         length: '1'
@@ -84,21 +84,91 @@ const App = () => {
 
     const keys = ['logo','deliveryOptionName', 'pickupDropoff', 'serviceType', 'codCharge', 'pickupCutOffTime', 'maxCODValue', 'returnFee', 'avgDeliveryTime', 'price'];
 
+    const cities = [
+        'Riyadh', 
+        'Jeddah', 
+        'Mecca', 
+        'Medina', 
+        'Dammam', 
+        'Tabuk', 
+        'Taif', 
+        'Buraidah', 
+        'Khobar', 
+        'Abha', 
+        'Najran', 
+        'Jubail', 
+        'Hail', 
+        'Khamis Mushait', 
+        'Al Khafji', 
+        'Al Majmaah', 
+        'Al Mubarraz', 
+        'Al Bahah', 
+        'Arar', 
+        'Jizan', 
+        'Yanbu', 
+        'Qatif', 
+        'Al Qunfudhah', 
+        'Hafar Al-Batin', 
+        'Al Ahsa', 
+        'Al Zulfi', 
+        'Ras Tanura', 
+        'Al Kharj', 
+        'Al Bukayriyah', 
+        'Al Qurayyat', 
+        'Afif', 
+        'Al Lith', 
+        'Al Dawadmi', 
+        'Rafha', 
+        'Duba', 
+        'Sharurah', 
+        'Turaif', 
+        'Al Ula', 
+        'Abqaiq', 
+        'Sakaka', 
+        'Ad Dilam', 
+        'Bisha', 
+        'Unaizah', 
+        'Khafji', 
+        'Al Wajh', 
+        'Baljurashi', 
+        'Al Mithnab', 
+        'As Sulayyil', 
+        'Al Hanakiyah', 
+        'Al Namas', 
+        'Al Quwayiyah', 
+        'Al Dair', 
+        'Al Mahd', 
+        'Al Shinan', 
+        'Al Hariq', 
+        'Al Muwayh'
+    ];
+    
+
     return (
         <div className="container">
             <form onSubmit={handleSubmit} className="form">
-                <label>
-                    Origin City
-                    <div className="input-group">
-                        <input type="text" name="originCity" value={formData.originCity} onChange={handleChange} placeholder="Origin City" />
-                    </div>
-                </label>
-                <label>
-                    Destination City
-                    <div className="input-group">
-                        <input type="text" name="destinationCity" value={formData.destinationCity} onChange={handleChange} placeholder="Destination City" />
-                    </div>
-                </label>
+<label>
+    Origin City
+    <div className="input-group">
+        <input list="cities" type="text" name="originCity" value={formData.originCity} onChange={handleChange} placeholder="Origin City" />
+        <datalist id="cities">
+            {cities.map((city, index) => (
+                <option key={index} value={city} />
+            ))}
+        </datalist>
+    </div>
+</label>
+<label>
+    Destination City
+    <div className="input-group">
+        <input list="cities" type="text" name="destinationCity" value={formData.destinationCity} onChange={handleChange} placeholder="Destination City" />
+        <datalist id="cities">
+            {cities.map((city, index) => (
+                <option key={index} value={city} />
+            ))}
+        </datalist>
+    </div>
+</label>
                 <label>
                     Length
                     <div className="input-group">
