@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './ShippingData.css';
 
 const App = () => {
     const [token, setToken] = useState(null);
@@ -63,40 +64,51 @@ const App = () => {
         });
     };
 
+    const handleClear = () => {
+        setResponse(null);
+    };
+
     const keys = ['serviceType', 'deliveryOptionName', 'trackingType', 'codCharge', 'pickupCutOffTime', 'maxOrderValue', 'insurancePolicy', 'maxCODValue', 'deliveryOptionId', 'extraWeightPerKg', 'deliveryCompanyName', 'returnFee', 'maxFreeWeight', 'avgDeliveryTime', 'price', 'logo', 'pickupDropoff'];
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <input type="text" name="weight" value={formData.weight} onChange={handleChange} placeholder="Weight" />
-                <input type="text" name="originCity" value={formData.originCity} onChange={handleChange} placeholder="Origin City" />
-                <input type="text" name="destinationCity" value={formData.destinationCity} onChange={handleChange} placeholder="Destination City" />
-                <input type="text" name="height" value={formData.height} onChange={handleChange} placeholder="Height" />
-                <input type="text" name="width" value={formData.width} onChange={handleChange} placeholder="Width" />
-                <input type="text" name="length" value={formData.length} onChange={handleChange} placeholder="Length" />
-                <button onClick={getToken}>Get Token</button>
-                <button type="submit">Submit</button>
+        <div className="container">
+            <form onSubmit={handleSubmit} className="form">
+                <input type="text" name="weight" value={formData.weight} onChange={handleChange} placeholder="Weight" className="input" />
+                <input type="text" name="originCity" value={formData.originCity} onChange={handleChange} placeholder="Origin City" className="input" />
+                <input type="text" name="destinationCity" value={formData.destinationCity} onChange={handleChange} placeholder="Destination City" className="input" />
+                <input type="text" name="height" value={formData.height} onChange={handleChange} placeholder="Height" className="input" />
+                <input type="text" name="width" value={formData.width} onChange={handleChange} placeholder="Width" className="input" />
+                <input type="text" name="length" value={formData.length} onChange={handleChange} placeholder="Length" className="input" />
+                <button onClick={getToken} className="button">Get Token</button>
+                <button type="button" onClick={handleClear} className="button">Clear</button>
+                <button type="submit" className="button">Search</button>
             </form>
             {response && 
-                <table style={{border: '1px solid black', borderCollapse: 'collapse', width: '100%'}}>
-                    <thead>
-                        <tr>
-                            {keys.map((key, index) => (
-                                <th key={index} style={{border: '1px solid black', padding: '10px', backgroundColor: '#f2f2f2'}}>{key}</th>
+            <table className="table">
+                <thead>
+                    <tr>
+                        {keys.map((key, index) => (
+                            <th key={index} className="table-header">{key}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {response.deliveryCompany.map((item, idx) => (
+                        <tr key={idx}>
+                            {keys.map((key, i) => (
+                                <td key={i} className="table-data">
+                                    {key === 'logo' ? 
+                                        <img src={item[key]} alt="logo" style={{width: '50px', height: '50px'}} /> 
+                                        : 
+                                        item[key]
+                                    }
+                                </td>
                             ))}
                         </tr>
-                    </thead>
-                    <tbody>
-                        {response.deliveryCompany.map((item, idx) => (
-                            <tr key={idx}>
-                                {keys.map((key, i) => (
-                                    <td key={i} style={{border: '1px solid black', padding: '10px'}}>{item[key]}</td>
-                                ))}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            }
+                    ))}
+                </tbody>
+            </table>
+        }
         </div>
     );
 };

@@ -1,0 +1,58 @@
+.input {
+    padding: 10px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.input:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.table-header {
+    padding: 10px;
+    background-color: #007BFF;
+    border: 1px solid #ddd;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: white;
+}
+
+.table-data {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+    background-color: #f2f2f2;
+}
+.button {
+    padding: 8px 16px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    font-size: 0.9em;
+    border-radius: 3px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.button:active {
+    transform: scale(0.95);
+}
