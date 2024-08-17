@@ -68,17 +68,18 @@ const App = () => {
         setResponse(null);
     };
 
-    const keys = ['serviceType', 'deliveryOptionName', 'trackingType', 'codCharge', 'pickupCutOffTime', 'maxOrderValue', 'insurancePolicy', 'maxCODValue', 'deliveryOptionId', 'extraWeightPerKg', 'deliveryCompanyName', 'returnFee', 'maxFreeWeight', 'avgDeliveryTime', 'price', 'logo', 'pickupDropoff'];
+   // const keys = ['logo', 'serviceType', 'deliveryOptionName', 'trackingType', 'codCharge', 'pickupCutOffTime', 'maxOrderValue', 'insurancePolicy', 'maxCODValue', 'deliveryOptionId', 'extraWeightPerKg', 'deliveryCompanyName', 'returnFee', 'maxFreeWeight', 'avgDeliveryTime', 'price', 'pickupDropoff'];
+    const keys = ['logo','deliveryOptionName', 'pickupDropoff', 'serviceType', 'codCharge', 'pickupCutOffTime', 'maxCODValue', 'returnFee', 'avgDeliveryTime', 'price'];
 
     return (
         <div className="container">
             <form onSubmit={handleSubmit} className="form">
-                <input type="text" name="weight" value={formData.weight} onChange={handleChange} placeholder="Weight" className="input" />
                 <input type="text" name="originCity" value={formData.originCity} onChange={handleChange} placeholder="Origin City" className="input" />
                 <input type="text" name="destinationCity" value={formData.destinationCity} onChange={handleChange} placeholder="Destination City" className="input" />
                 <input type="text" name="height" value={formData.height} onChange={handleChange} placeholder="Height" className="input" />
                 <input type="text" name="width" value={formData.width} onChange={handleChange} placeholder="Width" className="input" />
                 <input type="text" name="length" value={formData.length} onChange={handleChange} placeholder="Length" className="input" />
+                <input type="text" name="weight" value={formData.weight} onChange={handleChange} placeholder="Weight" className="input" />
                 <button onClick={getToken} className="button">Get Token</button>
                 <button type="button" onClick={handleClear} className="button">Clear</button>
                 <button type="submit" className="button">Search</button>
