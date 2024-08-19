@@ -111,7 +111,7 @@ const App = () => {
     };
 
     // const keys = ['logo', 'serviceType', 'deliveryOptionName', 'trackingType', 'codCharge', 'pickupCutOffTime', 'maxOrderValue', 'insurancePolicy', 'maxCODValue', 'deliveryOptionId', 'extraWeightPerKg', 'deliveryCompanyName', 'returnFee', 'maxFreeWeight', 'avgDeliveryTime', 'price', 'pickupDropoff'];
-    const keys = ['logo','deliveryOptionName', 'pickupDropoff', 'serviceType', 'codCharge', 'pickupCutOffTime', 'maxCODValue', 'returnFee', 'avgDeliveryTime', 'price'];
+    const keys = ['logo','deliveryOptionName', 'pickupDropoff', 'serviceType', 'codCharge', 'pickupCutOffTime', 'maxCODValue', 'maxFreeWeight', 'extraWeightPerKg', 'returnFee', 'avgDeliveryTime', 'price'];
 
     const cities = [
         'Riyadh', 'Jeddah', 'Mecca', 'Medina', 'Dammam', 'Tabuk', 'Taif', 'Buraidah', 
