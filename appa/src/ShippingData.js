@@ -3,6 +3,8 @@ import axios from 'axios';
 import './ShippingData.css';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 
+const refreshToken = process.env.REACT_APP_REFRESH_TOKEN;
+
 const App = () => {
     const [token, setToken] = useState(null);
     const [formData, setFormData] = useState({
