@@ -67,20 +67,16 @@ const App = () => {
 
     const getToken = () => {
         var refreshData = {
-            "refresh_token": "AMf-vBxqVxGZiDz7lDPkzTLzjvXsu0vHdbX1EYERsxsa07lYbVV2Na5VGNFq6ARc1Jg1lCIBbj-suvMRv3KL0GMIQjEsnta7pvyLxJtIzm1YN1dZ31uhJGUMO8e_VjUmm35BZ6MgxH4kwyOSclN4-3iB9yapKY5ZDaO93bBJpPIGLC5gnCBCbK8bPSHX4z_b1f0Mc6wzuOb6cS4H-3J36ZV15RVLmt8uRQ"
-        };
-
-        axios.post("https://api.tryoto.com/rest/v2/refreshToken", refreshData, {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        .then(response => {
-            console.log(response.data); // Log the entire response data
-            setToken(response.data.access_token); // Save the token in state
-        })
-        .catch(error => console.log('error', error));
-    };
+               "refresh_token": refreshToken
+           };
+       
+           axios.post("https://api.tryoto.com/rest/v2/refreshToken", refreshData)
+           .then(response => {
+               console.log(response.data); // Log the entire response data
+               setToken(response.data.access_token); // Save the token in state
+           })
+           .catch(error => console.log('error', error));
+       };
 
     const handleSubmit = (e) => {
         e.preventDefault();
