@@ -62,10 +62,10 @@ const CreateOrder = () => {
 
     const getToken = () => {
         var refresh = {
-            "refresh_token": "AMf-vBxqVxGZiDz7lDPkzTLzjvXsu0vHdbX1EYERsxsa07lYbVV2Na5VGNFq6ARc1Jg1lCIBbj-suvMRv3KL0GMIQjEsnta7pvyLxJtIzm1YN1dZ31uhJGUMO8e_VjUmm35BZ6MgxH4kwyOSclN4-3iB9yapKY5ZDaO93bBJpPIGLC5gnCBCbK8bPSHX4z_b1f0Mc6wzuOb6cS4H-3J36ZV15RVLmt8uRQ"
+            "refresh_token": "AMf-vBwoi4oY-ejRJkhOzIgAX6SBV3_2r7vTQfYecM8FuxgKQxNhMOjo66B7BItZXMqKcuNNHxufqeCTCTd2OTwttOEwqcSGq26UkdmyF74_6ZQkYEPdQDKX3-3DnKPh1OZqx9pViOy6hIBSKkT-8wReBybaGChW9JwTaEwjK1vX9T6reiadCwBm6j6QHDAYkBFZ41_9EWf2VWbsa5P2eAXLBQfCowBBqQ"
         };
 
-        axios.post("https://api.tryoto.com/rest/v2/refreshToken", refresh, {
+        axios.post("https://staging-api.tryoto.com/rest/v2/refreshToken", refresh, {
             headers: {
                 "Content-Type": "application/json"
             }
@@ -89,7 +89,7 @@ const CreateOrder = () => {
         const config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: 'https://api.tryoto.com/rest/v2/createOrder',
+            url: 'https://staging-api.tryoto.com/rest/v2/createOrder',
             headers: { 
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${token}`

@@ -67,10 +67,10 @@ const App = () => {
 
     const getToken = () => {
         var refreshData = {
-               "refresh_token": refreshToken
-           };
+            "refresh_token": "AMf-vBwoi4oY-ejRJkhOzIgAX6SBV3_2r7vTQfYecM8FuxgKQxNhMOjo66B7BItZXMqKcuNNHxufqeCTCTd2OTwttOEwqcSGq26UkdmyF74_6ZQkYEPdQDKX3-3DnKPh1OZqx9pViOy6hIBSKkT-8wReBybaGChW9JwTaEwjK1vX9T6reiadCwBm6j6QHDAYkBFZ41_9EWf2VWbsa5P2eAXLBQfCowBBqQ"
+        };
        
-           axios.post("https://api.tryoto.com/rest/v2/refreshToken", refreshData)
+           axios.post("https://staging-api.tryoto.com/rest/v2/refreshToken", refreshData)
            .then(response => {
                console.log(response.data); // Log the entire response data
                setToken(response.data.access_token); // Save the token in state
@@ -88,7 +88,7 @@ const App = () => {
 
         var config = {
             method: 'post',
-            url: 'https://api.tryoto.com/rest/v2/checkOTODeliveryFee',
+            url: 'https://staging-api.tryoto.com/rest/v2/checkOTODeliveryFee',
             headers: { 
                 'Authorization': `Bearer ${token}`
             },
