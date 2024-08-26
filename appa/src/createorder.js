@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './createorder.css';
 
@@ -61,23 +62,20 @@ const CreateOrder = () => {
 
 
     const getToken = () => {
-        var refresh = {
+        var refreshData = {
             "refresh_token": "AMf-vBwoi4oY-ejRJkhOzIgAX6SBV3_2r7vTQfYecM8FuxgKQxNhMOjo66B7BItZXMqKcuNNHxufqeCTCTd2OTwttOEwqcSGq26UkdmyF74_6ZQkYEPdQDKX3-3DnKPh1OZqx9pViOy6hIBSKkT-8wReBybaGChW9JwTaEwjK1vX9T6reiadCwBm6j6QHDAYkBFZ41_9EWf2VWbsa5P2eAXLBQfCowBBqQ"
         };
+       
+           axios.post("https://staging-api.tryoto.com/rest/v2/refreshToken", refreshData)
+           .then(response => {
+               console.log(response.data); // Log the entire response data
+               setToken(response.data.access_token); // Save the token in state
+           })
+           .catch(error => console.log('error', error));
+       };
 
-        axios.post("https://staging-api.tryoto.com/rest/v2/refreshToken", refresh, {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        .then(response => {
-            setToken(response.data.access_token);
-        })
-        .catch(error => console.log('error', error));
-    };
-
-    useEffect(() => {
-        getToken();
+       useEffect(() => {
+        //getToken();
     }, []);
 
     const createOrder = () => {
@@ -112,6 +110,11 @@ const CreateOrder = () => {
     };
 
     return (
+        <div className="container">
+                <Link to="/">
+                    <button className="rbutton">Back</button>
+                </Link>
+                <button type="rbutton" onClick={getToken} className="rbutton">Get Token</button>
         <form onSubmit={handleSubmit} className="form">
             <label className="label">
                 <span>Order ID</span>
@@ -167,6 +170,7 @@ const CreateOrder = () => {
             </label>
             <button type="submit" className="button">Create Order</button>
         </form>
+        </div>
     );
 };
 

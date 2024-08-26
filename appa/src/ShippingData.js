@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './ShippingData.css';
 import { FaMapMarkerAlt } from 'react-icons/fa';
@@ -126,6 +127,9 @@ const App = () => {
 
     return (
         <div className="container">
+                <Link to="/create-order">
+                    <button className="rbutton">Create Order</button>
+                </Link>
             <form onSubmit={handleSubmit} className="form">
             <label>
             Origin City
