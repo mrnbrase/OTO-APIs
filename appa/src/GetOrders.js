@@ -77,6 +77,9 @@ const App = () => {
             <Link to="/">
                 <button className="rbutton">Back</button>
             </Link>
+            <Link to="/purchase-credits">
+                    <button className="rbutton">Purchase Credits</button>
+            </Link>
             <Link to="/create-order">
                 <button className="rbutton">Create Order</button>
             </Link>
