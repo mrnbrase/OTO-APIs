@@ -1,0 +1,178 @@
+/* Overall page background */
+body {
+    background-color: #1a1a1a; /* Dark background for the whole page */
+    color: white; /* Default text color */
+    font-family: Arial, sans-serif;
+}
+
+/* Container styling */
+.container {
+    width: 80%;
+    margin: 0 auto;
+    background-color: #1f1f1f; /* Dark background for the container */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Input styling similar to the provided design */
+.input-group {
+    display: flex;
+    align-items: center;
+    background-color: #333;
+    border: 1px solid #555;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.input-group input {
+    border: none;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    font-size: 16px;
+}
+
+.input-group button {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.input-group button:hover {
+    background-color: #555;
+}
+
+.input-group span {
+    color: white;
+    padding: 10px;
+    background-color: #444;
+}
+
+.input:focus {
+    outline: none;
+}
+
+.label {
+    margin-bottom: 5px;
+    color: #ccc;
+    font-weight: bold;
+}
+
+.form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.form label {
+    width: 48%; /* Adjust to handle two inputs per row */
+    margin-bottom: 20px;
+}
+
+/* Button styling */
+.button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #1a73e8;
+    color: white;
+    cursor: pointer;
+    font-size: 1em;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-top: 20px;
+}
+
+.button:hover {
+    background-color: #0b5ed7;
+    transform: scale(1.05);
+}
+
+.button:active {
+    transform: scale(0.95);
+}
+
+/* Table styling */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #2b2b2b; /* Dark background for the table */
+    box-shadow: none; /* Remove shadow */
+}
+
+.table-header {
+    padding: 10px;
+    background-color: #444; /* Darker header */
+    border: 1px solid #555;
+    color: white; /* White text */
+}
+
+.table-data {
+    padding: 10px;
+    border: 1px solid #555; /* Darker border */
+    text-align: center;
+    background-color: #3c3c3c; /* Slightly lighter background for rows */
+    color: white; /* White text */
+}
+
+/* Dropdown styling */
+.dropdown {
+    position: absolute;
+    background-color: #1f1f1f;
+    border: 1px solid #555;
+    border-radius: 5px;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Ensure it stays above other elements */
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+    background-color: #333;
+}
+
+.dropdown-icon {
+    margin-right: 10px;
+    color: #1a73e8; /* Color of the location icon */
+}
+
+.input-group {
+    position: relative; /* Ensure dropdown is positioned correctly */
+}
+
+.rbutton {
+    padding: 10px 20px;
+    border: none;
+    background-color: #467fcd;
+    color: white;
+    cursor: pointer;
+    font-size: 1em;
+    border-radius: 20px;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-top: 20px;
+    margin-left: 10px;
+}
