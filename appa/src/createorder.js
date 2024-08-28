@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './createorder.css';
@@ -27,7 +27,31 @@ const CreateOrder = () => {
         }]
     });
 
-    // Load the token and its expiry time from localStorage when the component mounts
+    
+    const baseUrl = process.env.NODE_ENV === 'production' 
+    ? process.env.REACT_APP_API_BASE_URL_PRODUCTION 
+    : process.env.REACT_APP_API_BASE_URL_TESTING;
+
+    const getToken = useCallback(() => {
+        const refreshData = {
+            "refresh_token": process.env.REACT_APP_REFRESH_TOKEN
+        };
+    
+        axios.post(`${baseUrl}/refreshToken`, refreshData)
+            .then(response => {
+                const newToken = response.data.access_token;
+                const expiresIn = response.data.expires_in; // Get the expiration time in seconds
+                const expiryTime = new Date(new Date().getTime() + expiresIn * 1000); // Calculate expiry time
+    
+                setToken(newToken);
+                setTokenExpiry(expiryTime);
+    
+                localStorage.setItem('authToken', newToken);
+                localStorage.setItem('tokenExpiry', expiryTime);
+            })
+            .catch(error => console.log('Error fetching token:', error));
+    }, [baseUrl]);
+    
     useEffect(() => {
         const savedToken = localStorage.getItem('authToken');
         const savedTokenExpiry = localStorage.getItem('tokenExpiry');
@@ -37,27 +61,9 @@ const CreateOrder = () => {
         } else {
             getToken();
         }
-    }, []);
-
-    const getToken = () => {
-        const refreshData = {
-            "refresh_token": process.env.REACT_APP_REFRESH_TOKEN
-        };
-
-        axios.post("https://staging-api.tryoto.com/rest/v2/refreshToken", refreshData)
-            .then(response => {
-                const newToken = response.data.access_token;
-                const expiresIn = response.data.expires_in; // Get the expiration time in seconds
-                const expiryTime = new Date(new Date().getTime() + expiresIn * 1000); // Calculate expiry time
-
-                setToken(newToken);
-                setTokenExpiry(expiryTime);
-
-                localStorage.setItem('authToken', newToken);
-                localStorage.setItem('tokenExpiry', expiryTime);
-            })
-            .catch(error => console.log('Error fetching token:', error));
-    };
+    }, [getToken]); // Now you can safely include getToken
+    
+    
 
     const checkTokenExpiry = () => {
         if (!token || !tokenExpiry || new Date(tokenExpiry) <= new Date()) {
@@ -69,7 +75,7 @@ const CreateOrder = () => {
         e.preventDefault();
         checkTokenExpiry();
         try {
-            const response = await axios.post('https://staging-api.tryoto.com/rest/v2/createOrder', orderData, {
+            const response = await axios.post(`${baseUrl}/createOrder`, orderData, {
                 headers: { 
                     'Accept': 'application/json',
                     'Authorization': `Bearer ${token}`

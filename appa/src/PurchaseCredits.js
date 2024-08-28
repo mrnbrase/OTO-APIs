@@ -3,6 +3,12 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './PurchaseCredits.css'; // Ensure to create this CSS file for styling
 
+const baseUrl = process.env.NODE_ENV === 'production' 
+? process.env.REACT_APP_API_BASE_URL_PRODUCTION 
+: process.env.REACT_APP_API_BASE_URL_TESTING;
+
+
+
 const PurchaseCredits = () => {
     const [token, setToken] = useState(null);
     const [tokenExpiry, setTokenExpiry] = useState(null);
@@ -26,7 +32,7 @@ const PurchaseCredits = () => {
             "refresh_token": process.env.REACT_APP_REFRESH_TOKEN
         };
 
-        axios.post("https://staging-api.tryoto.com/rest/v2/refreshToken", refreshData)
+        axios.post(`${baseUrl}/refreshToken`, refreshData)
             .then(response => {
                 const newToken = response.data.access_token;
                 const expiresIn = response.data.expires_in; // Get the expiration time in seconds
@@ -56,7 +62,7 @@ const PurchaseCredits = () => {
 
         const config = {
             method: 'post',
-            url: 'https://staging-api.tryoto.com/rest/v2/buyShippingCredit',
+            url: `${baseUrl}/buyShippingCredit`,
             headers: { 
                 'Authorization': `Bearer ${token}`
             },
@@ -82,7 +88,7 @@ const PurchaseCredits = () => {
 
         const config = {
             method: 'post',
-            url: 'https://staging-api.tryoto.com/rest/v2/buyOTOCredit',
+            url: `${baseUrl}/buyOTOCredit`,
             headers: { 
                 'Authorization': `Bearer ${token}`
             },

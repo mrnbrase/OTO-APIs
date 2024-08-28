@@ -20,6 +20,10 @@ const App = () => {
     const [filteredDestinationCities, setFilteredDestinationCities] = useState([]);
     const [showDropdown, setShowDropdown] = useState(false);
 
+    const baseUrl = process.env.NODE_ENV === 'production' 
+    ? process.env.REACT_APP_API_BASE_URL_PRODUCTION 
+    : process.env.REACT_APP_API_BASE_URL_TESTING;
+
     // Load the token and its expiry time from localStorage when the component mounts
     useEffect(() => {
         const savedToken = localStorage.getItem('authToken');
@@ -37,7 +41,7 @@ const App = () => {
             "refresh_token": process.env.REACT_APP_REFRESH_TOKEN
         };
 
-        axios.post("https://staging-api.tryoto.com/rest/v2/refreshToken", refreshData)
+        axios.post(`${baseUrl}/refreshToken`, refreshData)  // Use the baseUrl here
             .then(response => {
                 const newToken = response.data.access_token;
                 const expiresIn = response.data.expires_in; // Get the expiration time in seconds
@@ -51,6 +55,7 @@ const App = () => {
             })
             .catch(error => console.log('Error fetching token:', error));
     };
+
 
     const checkTokenExpiry = () => {
         if (!token || !tokenExpiry || new Date(tokenExpiry) <= new Date()) {
@@ -106,21 +111,21 @@ const App = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         checkTokenExpiry();
-
+    
         if (!token) {
             console.log('No token available');
             return;
         }
-
+    
         const config = {
             method: 'post',
-            url: 'https://staging-api.tryoto.com/rest/v2/checkOTODeliveryFee',
+            url: `${baseUrl}/checkOTODeliveryFee`,  // Use the baseUrl here
             headers: { 
                 'Authorization': `Bearer ${token}`
             },
             data: formData
         };
-
+    
         axios(config)
         .then(function (response) {
             setResponse(response.data);
@@ -129,6 +134,7 @@ const App = () => {
             console.log(error);
         });
     };
+    
 
     const handleClear = () => {
         setResponse(null);

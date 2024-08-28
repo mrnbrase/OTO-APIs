@@ -1,9 +1,13 @@
 import axios from 'axios';
 
+const baseUrl = process.env.NODE_ENV === 'production' 
+? process.env.REACT_APP_API_BASE_URL_PRODUCTION 
+: process.env.REACT_APP_API_BASE_URL_TESTING;
+
 const getAllOrders = async (perPage, page, minDate, maxDate, token) => {
     const config = {
         method: 'get',
-        url: `https://staging-api.tryoto.com/rest/v2/getAllOrders?perPage=${perPage}&page=${page}&minDate=${minDate}&maxDate=${maxDate}`,
+        url: `${baseUrl}/getAllOrders?perPage=${perPage}&page=${page}&minDate=${minDate}&maxDate=${maxDate}`,
         headers: { 
             'Accept': 'application/json',
             'Authorization': `Bearer ${token}`
