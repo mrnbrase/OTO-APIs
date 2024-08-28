@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './ShippingData.css';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 
-const refreshToken = process.env.REACT_APP_REFRESH_TOKEN;
-
 const App = () => {
     const [token, setToken] = useState(null);
+    const [tokenExpiry, setTokenExpiry] = useState(null);
     const [formData, setFormData] = useState({
         weight: '3',
         originCity: '',
@@ -20,6 +19,44 @@ const App = () => {
     const [filteredOriginCities, setFilteredOriginCities] = useState([]);
     const [filteredDestinationCities, setFilteredDestinationCities] = useState([]);
     const [showDropdown, setShowDropdown] = useState(false);
+
+    // Load the token and its expiry time from localStorage when the component mounts
+    useEffect(() => {
+        const savedToken = localStorage.getItem('authToken');
+        const savedTokenExpiry = localStorage.getItem('tokenExpiry');
+        if (savedToken && savedTokenExpiry && new Date(savedTokenExpiry) > new Date()) {
+            setToken(savedToken);
+            setTokenExpiry(savedTokenExpiry);
+        } else {
+            getToken();
+        }
+    }, []);
+
+    const getToken = () => {
+        const refreshData = {
+            "refresh_token": process.env.REACT_APP_REFRESH_TOKEN
+        };
+
+        axios.post("https://staging-api.tryoto.com/rest/v2/refreshToken", refreshData)
+            .then(response => {
+                const newToken = response.data.access_token;
+                const expiresIn = response.data.expires_in; // Get the expiration time in seconds
+                const expiryTime = new Date(new Date().getTime() + expiresIn * 1000); // Calculate expiry time
+
+                setToken(newToken);
+                setTokenExpiry(expiryTime);
+
+                localStorage.setItem('authToken', newToken);
+                localStorage.setItem('tokenExpiry', expiryTime);
+            })
+            .catch(error => console.log('Error fetching token:', error));
+    };
+
+    const checkTokenExpiry = () => {
+        if (!token || !tokenExpiry || new Date(tokenExpiry) <= new Date()) {
+            getToken();
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -66,34 +103,22 @@ const App = () => {
         }));
     };
 
-    const getToken = () => {
-        var refreshData = {
-            "refresh_token": process.env.REACT_APP_REFRESH_TOKEN
-        };
-       
-           axios.post("https://staging-api.tryoto.com/rest/v2/refreshToken", refreshData)
-           .then(response => {
-               console.log(response.data); // Log the entire response data
-               setToken(response.data.access_token); // Save the token in state
-           })
-           .catch(error => console.log('error', error));
-       };
-
     const handleSubmit = (e) => {
         e.preventDefault();
+        checkTokenExpiry();
 
         if (!token) {
             console.log('No token available');
             return;
         }
 
-        var config = {
+        const config = {
             method: 'post',
             url: 'https://staging-api.tryoto.com/rest/v2/checkOTODeliveryFee',
             headers: { 
                 'Authorization': `Bearer ${token}`
             },
-            data : formData
+            data: formData
         };
 
         axios(config)
@@ -109,7 +134,6 @@ const App = () => {
         setResponse(null);
     };
 
-    // const keys = ['logo', 'serviceType', 'deliveryOptionName', 'trackingType', 'codCharge', 'pickupCutOffTime', 'maxOrderValue', 'insurancePolicy', 'maxCODValue', 'deliveryOptionId', 'extraWeightPerKg', 'deliveryCompanyName', 'returnFee', 'maxFreeWeight', 'avgDeliveryTime', 'price', 'pickupDropoff'];
     const keys = ['logo','deliveryOptionId', 'deliveryOptionName', 'pickupDropoff', 'serviceType', 'codCharge', 'pickupCutOffTime', 'maxCODValue', 'maxFreeWeight', 'extraWeightPerKg', 'returnFee', 'avgDeliveryTime', 'price'];
 
     const cities = [
@@ -123,7 +147,6 @@ const App = () => {
         'As Sulayyil', 'Al Hanakiyah', 'Al Namas', 'Al Quwayiyah', 'Al Dair', 
         'Al Mahd', 'Al Shinan', 'Al Hariq', 'Al Muwayh'
     ];
-    
 
     return (
         <div className="container">
@@ -225,7 +248,7 @@ const App = () => {
                         <button type="button" onClick={() => increment('weight')}>+</button>
                     </div>
                 </label>
-                <button type="button" onClick={getToken} className="button">Get Token</button> 
+                
                 <button type="button" onClick={handleClear} className="button">Clear</button>
                 <button type="submit" className="button">Search</button>
             </form>
@@ -258,7 +281,6 @@ const App = () => {
             }
         </div>
     );
-    
 };
 
 export default App;

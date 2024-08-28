@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import getAllOrders from './GetAllOrders';
@@ -6,26 +6,53 @@ import './GetOrders.css'; // Import the CSS file
 
 const App = () => {
     const [token, setToken] = useState(null);
+    const [tokenExpiry, setTokenExpiry] = useState(null);
     const [orders, setOrders] = useState(null);
     const [perPage, setPerPage] = useState(3); // Default values can be set here
     const [page, setPage] = useState(1);
     const [minDate, setMinDate] = useState('2022-01-01');
     const [maxDate, setMaxDate] = useState('2025-01-01');
 
+    // Load the token and its expiry time from localStorage when the component mounts
+    useEffect(() => {
+        const savedToken = localStorage.getItem('authToken');
+        const savedTokenExpiry = localStorage.getItem('tokenExpiry');
+        if (savedToken && savedTokenExpiry && new Date(savedTokenExpiry) > new Date()) {
+            setToken(savedToken);
+            setTokenExpiry(savedTokenExpiry);
+        } else {
+            getToken();
+        }
+    }, []);
+
     const getToken = () => {
-        var refreshData = {
+        const refreshData = {
             "refresh_token": process.env.REACT_APP_REFRESH_TOKEN
         };
 
         axios.post("https://staging-api.tryoto.com/rest/v2/refreshToken", refreshData)
             .then(response => {
-                console.log('Token received:', response.data.access_token);
-                setToken(response.data.access_token); // Save the token in state
+                const newToken = response.data.access_token;
+                const expiresIn = response.data.expires_in; // Get the expiration time in seconds
+                const expiryTime = new Date(new Date().getTime() + expiresIn * 1000); // Calculate expiry time
+
+                setToken(newToken);
+                setTokenExpiry(expiryTime);
+
+                localStorage.setItem('authToken', newToken);
+                localStorage.setItem('tokenExpiry', expiryTime);
             })
             .catch(error => console.log('Error fetching token:', error));
     };
 
+    const checkTokenExpiry = () => {
+        if (!token || !tokenExpiry || new Date(tokenExpiry) <= new Date()) {
+            getToken();
+        }
+    };
+
     const searchOrders = async () => {
+        checkTokenExpiry();
         if (!token) {
             console.log('No token available');
             return;
@@ -39,6 +66,7 @@ const App = () => {
             console.error('Error fetching orders:', error);
         }
     };
+
     const handleClear = () => {
         setOrders(null); // Clear the orders list
     };
@@ -50,9 +78,9 @@ const App = () => {
                 <button className="rbutton">Back</button>
             </Link>
             <Link to="/create-order">
-                    <button className="rbutton">Create Order</button>
-                </Link>
-            <button type="button" onClick={getToken} className="rbutton">Get Token</button>
+                <button className="rbutton">Create Order</button>
+            </Link>
+
 
             <div>
                 <label>

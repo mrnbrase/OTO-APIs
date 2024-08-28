@@ -5,6 +5,7 @@ import './createorder.css';
 
 const CreateOrder = () => {
     const [token, setToken] = useState("");
+    const [tokenExpiry, setTokenExpiry] = useState(null); // To store the expiration time
     const [orderData, setOrderData] = useState({
         orderId: '',
         payment_method: '',
@@ -26,26 +27,47 @@ const CreateOrder = () => {
         }]
     });
 
+    // Load the token and its expiry time from localStorage when the component mounts
+    useEffect(() => {
+        const savedToken = localStorage.getItem('authToken');
+        const savedTokenExpiry = localStorage.getItem('tokenExpiry');
+        if (savedToken && savedTokenExpiry && new Date(savedTokenExpiry) > new Date()) {
+            setToken(savedToken);
+            setTokenExpiry(savedTokenExpiry);
+        } else {
+            getToken();
+        }
+    }, []);
+
     const getToken = () => {
-        var refreshData = {
+        const refreshData = {
             "refresh_token": process.env.REACT_APP_REFRESH_TOKEN
         };
 
         axios.post("https://staging-api.tryoto.com/rest/v2/refreshToken", refreshData)
             .then(response => {
-                console.log(response.data); // Log the entire response data
-                setToken(response.data.access_token); // Save the token in state
+                const newToken = response.data.access_token;
+                const expiresIn = response.data.expires_in; // Get the expiration time in seconds
+                const expiryTime = new Date(new Date().getTime() + expiresIn * 1000); // Calculate expiry time
+
+                setToken(newToken);
+                setTokenExpiry(expiryTime);
+
+                localStorage.setItem('authToken', newToken);
+                localStorage.setItem('tokenExpiry', expiryTime);
             })
-            .catch(error => console.log('error', error));
+            .catch(error => console.log('Error fetching token:', error));
     };
 
-    useEffect(() => {
-        // Uncomment the below line to get the token on component mount
-        // getToken();
-    }, []);
+    const checkTokenExpiry = () => {
+        if (!token || !tokenExpiry || new Date(tokenExpiry) <= new Date()) {
+            getToken();
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        checkTokenExpiry();
         try {
             const response = await axios.post('https://staging-api.tryoto.com/rest/v2/createOrder', orderData, {
                 headers: { 
@@ -65,7 +87,9 @@ const CreateOrder = () => {
             <Link to="/">
                 <button className="rbutton">Back</button>
             </Link>
-            <button type="button" onClick={getToken} className="rbutton">Get Token</button>
+            <Link to="/get-orders">
+                    <button className="rbutton">Get Orders</button>
+            </Link>
             <form onSubmit={handleSubmit} className="form">
                 <label className="label">
                     <span>Order ID</span>
