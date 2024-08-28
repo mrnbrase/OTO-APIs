@@ -3,6 +3,7 @@ body {
     background-color: #1a1a1a; /* Dark background for the whole page */
     color: white; /* Default text color */
     font-family: Arial, sans-serif;
+    padding-top: 60px;
 }
 
 /* Container styling */
