@@ -28,7 +28,7 @@ const CreateOrder = () => {
 
     const getToken = () => {
         var refreshData = {
-            "refresh_token": "AMf-vBwoi4oY-ejRJkhOzIgAX6SBV3_2r7vTQfYecM8FuxgKQxNhMOjo66B7BItZXMqKcuNNHxufqeCTCTd2OTwttOEwqcSGq26UkdmyF74_6ZQkYEPdQDKX3-3DnKPh1OZqx9pViOy6hIBSKkT-8wReBybaGChW9JwTaEwjK1vX9T6reiadCwBm6j6QHDAYkBFZ41_9EWf2VWbsa5P2eAXLBQfCowBBqQ"
+            "refresh_token": process.env.REACT_APP_REFRESH_TOKEN
         };
 
         axios.post("https://staging-api.tryoto.com/rest/v2/refreshToken", refreshData)
