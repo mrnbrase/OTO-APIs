@@ -25,6 +25,12 @@ const PurchaseCredits = () => {
         }
     }, []);
 
+    useEffect(() => {
+        if (token) {
+            getClientInfo(); // Fetch client info once the token is available
+        }
+    }, [token]);
+
     const getToken = () => {
         const refreshData = {
             "refresh_token": process.env.REACT_APP_REFRESH_TOKEN
@@ -49,6 +55,32 @@ const PurchaseCredits = () => {
         if (!token || !tokenExpiry || new Date(tokenExpiry) <= new Date()) {
             getToken();
         }
+    };
+
+    const getClientInfo = () => {
+        checkTokenExpiry();
+        if (!token) {
+            console.log('No token available');
+            return;
+        }
+
+        const config = {
+            method: 'get',
+            url: 'https://staging-api.tryoto.com/rest/v2/clientInfo', // Updated to staging endpoint
+            headers: { 
+                'Authorization': `Bearer ${token}`
+            }
+        };
+
+        axios(config)
+        .then(response => {
+            setClientInfo({
+                remainingShippingCredit: response.data.remainingShippingCredit,
+                remainingOTOCredit: response.data.remainingOTOCredit,
+            });
+            console.log('Client Info:', response.data);
+        })
+        .catch(error => console.log('Error fetching client info:', error));
     };
 
     const handleBuyShippingCredit = () => {
@@ -103,47 +135,17 @@ const PurchaseCredits = () => {
         .catch(error => console.log('Error purchasing OTO credit:', error));
     };
 
-    const getClientInfo = () => {
-        checkTokenExpiry();
-        if (!token) {
-            console.log('No token available');
-            return;
-        }
-
-        const config = {
-            method: 'get',
-            url: 'https://staging-api.tryoto.com/rest/v2/clientInfo', // Updated to staging endpoint
-            headers: { 
-                'Authorization': `Bearer ${token}`
-            }
-        };
-
-        axios(config)
-        .then(response => {
-            setClientInfo({
-                remainingShippingCredit: response.data.remainingShippingCredit,
-                remainingOTOCredit: response.data.remainingOTOCredit,
-            });
-            console.log('Client Info:', response.data);
-        })
-        .catch(error => console.log('Error fetching client info:', error));
-    };
-
     return (
         <div className="container">
+            <div className="credits-info">
+                <p>Remaining OTO Credit: {clientInfo.remainingOTOCredit !== null ? clientInfo.remainingOTOCredit : 'Loading...'}</p>
+                <p>Remaining Shipping Credit: {clientInfo.remainingShippingCredit !== null ? clientInfo.remainingShippingCredit : 'Loading...'}</p>
+            </div>
+
             <div className="heading">Purchase Credits</div>
             <Link to="/">
                 <button className="rbutton">Back</button>
             </Link>
-            <button className="rbutton" onClick={getToken}>Refresh Token</button>
-            <button className="rbutton" onClick={getClientInfo}>Get Client Info</button>
-
-            {clientInfo.remainingShippingCredit !== null && (
-                <div className="info">
-                    <p>Remaining Shipping Credit: {clientInfo.remainingShippingCredit}</p>
-                    <p>Remaining OTO Credit: {clientInfo.remainingOTOCredit}</p>
-                </div>
-            )}
 
             <div className="form">
                 <label className="label">
